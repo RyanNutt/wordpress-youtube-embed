@@ -22,7 +22,7 @@ if ( ! class_exists( 'Smashing_Updater' ) ) {
 }
 $updater = new Smashing_Updater( __FILE__ );
 $updater->set_username( 'ryannutt' );
-$updater->set_repository( 'wpseo-og-video' );
+$updater->set_repository( 'wordpress-wpseo-og-video' );
 $updater->initialize();
 
 class YouTubeEmbed {

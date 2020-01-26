@@ -95,13 +95,13 @@ class YouTube
 
                 if (!empty($largest['url'])) {
                     $remoteImage = new KM_Download_Remote_Image($largest['url'], [
-                        'title' => sprintf(__('YouTube thumbnail %s'), !empty($json['id']) ? $json['id'] : 'unknown')
+                        'title' => sprintf(__('YouTube thumbnail %s', 'aelora-youtube-embed'), !empty($json['id']) ? $json['id'] : 'unknown')
                     ]);
                     $attachmentID = $remoteImage->download();
                 }
                 if (empty($attachmentID)) {
                     if (defined('WP_DEBUG') && WP_DEBUG) {
-                        echo "\n<!-- " . __('Could not create file for remote YouTube download. Check permissions in your upload folders.') . " -->\n";
+                        echo "\n<!-- " . __('Could not create file for remote YouTube download. Check permissions in your upload folders.', 'aelora-youtube-embed') . " -->\n";
                     }
                     return false;
                 }

@@ -4,7 +4,7 @@
  * Plugin Name:       YouTube Embed Extras
  * Plugin URI:        https://github.com/RyanNutt/wordpress-youtube-embed
  * Description:       Adds video open graph tags when a YouTube embed is found in post content
- * Version:           0.1.0
+ * Version:           0.2.0
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Ryan Nutt
@@ -76,8 +76,8 @@ class YouTubeEmbed
   public static function settings_init()
   {
     register_setting('media', 'aelora-youtube-tags-apikey', [self::class, 'setting_sanitize']);
-    add_settings_section('aelora-youtube-tag-api', __('YouTube Tags', 'wpseo-youtube-embed'), '__return_false', 'media');
-    add_settings_field('aelora-youtube-tag-apikey', __('YouTube API Key', 'wpseo-youtube-embed'), [self::class, 'field_callback'], 'media', 'aelora-youtube-tag-api');
+    add_settings_section('aelora-youtube-tag-api', __('YouTube Tags', 'aelora-youtube-embed'), '__return_false', 'media');
+    add_settings_field('aelora-youtube-tag-apikey', __('YouTube API Key', 'aelora-youtube-embed'), [self::class, 'field_callback'], 'media', 'aelora-youtube-tag-api');
   }
 
   public static function settings_sanitize($input)

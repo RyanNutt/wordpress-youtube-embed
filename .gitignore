@@ -1,2 +1,4 @@
 /nbproject
 /.vscode
+/vendor
+/node_modules

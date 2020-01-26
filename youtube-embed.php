@@ -29,9 +29,7 @@ class YouTubeEmbed
     Yoast::init();
     add_action('admin_init', [self::class, 'settings_init']);
 
-    // add_filter('wpseo_opengraph_type', [self::class, 'og_type']);
     // add_filter('wpseo_metadesc', [self::class, 'empty_description']);
-    // add_action('wpseo_opengraph', [self::class, 'og_fields']);
 
     add_action('wp_head', [self::class, 'json_ld']);
 
@@ -131,112 +129,5 @@ class YouTubeEmbed
   {
     global $post;
     return is_single() && preg_match('~(?:https?://)?(?:www.)?(?:youtube.com|youtu.be)/(?:watch\?v=)?([^\s]+)~', $post->post_content);
-  }
-
-  /**
-   * Change the og type if there's a YouTube link in it. Oembed will take
-   * care of the actual editor. 
-   * 
-   * @global type $post
-   * @param type $type
-   * @return string
-   */
-  public static function og_type($type)
-  {
-    if (!is_single()) {
-      return $type;
-    }
-
-    global $post;
-
-    if (preg_match('~(?:https?://)?(?:www.)?(?:youtube.com|youtu.be)/(?:watch\?v=)?([^\s]+)~', $post->post_content)) {
-      return 'video';
-    }
-    return $type;
-  }
-
-  /**
-   * Action callback to output extra open graph tags if there is a video
-   * embedded on this page. 
-   */
-  public static function og_fields()
-  {
-
-    if (!is_single()) {
-      return;
-    }
-
-    global $post;
-    if (preg_match('~(?:https?://)?(?:www.)?(?:youtube.com|youtu.be)/(?:watch\?v=)?([^\s]+)~', $post->post_content, $matches)) {
-      if (!empty($matches[0])) {
-
-        /* Since there's going to be cases where the thumb url isn't
-         * empty, but the tags may be we'll use this to trap.
-         */
-        $api_call = false;
-
-        // Get the url for the thumbnail via API call
-        $thumb_url = get_post_meta($post->ID, 'youtube_thumb', true);
-        $thumb_url = false;
-        if (empty($thumb_url)) {
-          $api_call = json_decode(wp_remote_retrieve_body(wp_remote_get(esc_url_raw('https://www.googleapis.com/youtube/v3/videos?key=' . get_option('aelora-youtube-tags-apikey', '') . '&part=snippet&id=' . $matches[1]))), true);
-
-          if (!empty($api_call['error'])) {
-            if (defined('WP_DEBUG') && WP_DEBUG) {
-              if (!empty($api_call['error']['message'])) {
-                echo "\n<!-- " . $api_call['error']['message'] . " -->\n";
-              } else {
-                echo "\n<!-- Double check your YouTube API key -->\n";
-              }
-            }
-            return;
-          }
-
-          /* This thumb should always be there, so we're going to
-           * use it as a fallback. 
-           */
-          $thumb_url = 'https://i.ytimg.com/vi/' . $matches[1] . '/0.jpg';
-          $thumb_height = 360;
-          $thumb_width = 480;
-
-          if (!empty($api_call['items'][0]['snippet']['thumbnails'])) {
-            $thumbs = $api_call['items'][0]['snippet']['thumbnails'];
-            if (!empty($thumbs['maxres'])) {
-              $thumb_url = $thumbs['maxres']['url'];
-              $thumb_width = $thumbs['maxres']['width'];
-              $thumb_height = $thumbs['maxres']['height'];
-            } else if (!empty($thumbs['standard'])) {
-              $thumb_url = $thumbs['standard']['url'];
-              $thumb_width = $thumbs['standard']['width'];
-              $thumb_height = $thumbs['standard']['height'];
-            } else if (!empty($thumbs['high'])) {
-              $thumb_url = $thumbs['high']['url'];
-              $thumb_width = $thumbs['high']['width'];
-              $thumb_height = $thumbs['high']['height'];
-            } else if (!empty($thumbs['default'])) {
-              $thumb_url = $thumbs['default']['url'];
-              $thumb_width = $thumbs['default']['width'];
-              $thumb_height = $thumbs['default']['height'];
-            }
-          }
-
-          update_post_meta($post->ID, 'youtube_thumb', $thumb_url);
-          update_post_meta($post->ID, 'youtube_thumb_height', $thumb_height);
-          update_post_meta($post->ID, 'youtube_thumb_width', $thumb_width);
-        } else {
-          $thumb_url = get_post_meta($post->ID, 'youtube_thumb', true);
-          $thumb_height = get_post_meta($post->ID, 'youtube_thumb_height', true);
-          $thumb_width = get_post_meta($post->ID, 'youtube_thumb_width', true);
-        }
-
-        /* Output the tags. These are in the header. */
-        echo '<meta property="og:image" content="' . $thumb_url . '">
-        <meta property="og:video:url" content="' . $matches[0] . '">
-        <meta property="og:video:secure_url" content="' . $matches[0] . '">
-        <meta property="og:video:type" content="text/html">
-        <meta property="og:video:width" content="' . $thumb_width . '">
-        <meta property="og:video:height" content="' . $thumb_height . '">' . "\n";
-      }
-    }
   }
 }

@@ -4,7 +4,7 @@
  * Plugin Name:       YouTube Embed Extras
  * Plugin URI:        https://github.com/RyanNutt/wordpress-youtube-embed
  * Description:       Adds video open graph tags when a YouTube embed is found in post content
- * Version:           0.2.0
+ * Version:           0.2.1
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Ryan Nutt

@@ -2,9 +2,9 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: YouTube Embed Extras 0.1.0\n"
+"Project-Id-Version: YouTube Embed Extras 0.2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/RyanNutt/wordpress-youtube-embed\n"
-"POT-Creation-Date: 2020-01-26 19:47:58+00:00\n"
+"POT-Creation-Date: 2020-01-26 20:18:03+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,11 +24,11 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
 
-#: _inc/classes/YouTube.php:98
+#: _inc/classes/YouTube.php:104
 msgid "YouTube thumbnail %s"
 msgstr ""
 
-#: _inc/classes/YouTube.php:104
+#: _inc/classes/YouTube.php:110
 msgid ""
 "Could not create file for remote YouTube download. Check permissions in "
 "your upload folders."

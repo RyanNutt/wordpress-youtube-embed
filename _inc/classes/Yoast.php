@@ -15,7 +15,7 @@ class Yoast
 
     public static function og_fields()
     {
-        if (!YouTube::hasLink()) {
+        if (!is_single() || !YouTube::hasLink()) {
             return;
         }
         global $post;

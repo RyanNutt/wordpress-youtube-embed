@@ -16,10 +16,16 @@ class YouTube
         return json_decode(wp_remote_retrieve_body(wp_remote_get(esc_url_raw($url))), true);
     }
 
-    public static function hasLink()
+    public static function hasLink($postID = false)
     {
-        global $post;
-        return is_single() && preg_match('~(?:https?://)?(?:www.)?(?:youtube.com|youtu.be)/(?:watch\?v=)?([^\s]+)~', $post->post_content);
+        if (!empty($postID)) {
+            $tmp = get_post($postID);
+            $content = $postID->post_content;
+        } else {
+            global $post;
+            $content = $post->post_content;
+        }
+        return preg_match('~(?:https?://)?(?:www.)?(?:youtube.com|youtu.be)/(?:watch\?v=)?([^\s]+)~', $content);
     }
 
     /**

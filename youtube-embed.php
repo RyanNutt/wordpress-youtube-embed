@@ -33,11 +33,34 @@ class YouTubeEmbed
 
     add_action('wp_head', [self::class, 'json_ld']);
 
+    add_filter('get_post_metadata', [self::class, 'postMetadata'], 99, 4);
+    add_filter('get_page_metadata', [self::class, 'postMetadata'], 99, 4);
+
     $updater = new Smashing_Updater(__FILE__);
     $updater->set_username('ryannutt');
     $updater->set_repository('wordpress-youtube-embed');
     $updater->initialize();
   }
+
+  /**
+   * Filter for _thumbnail_id
+   */
+  public static function postMetadata($null, $objectID, $key, $single)
+  {
+    global $post;
+    if ($key == '_thumbnail_id') {
+      $allMeta = get_post_meta($post->ID);
+
+      /* If it's there, don't override it */
+      if (!isset($allMeta['_thumbnail_id'][0])) {
+        if (YouTube::hasLink()) {
+          $attachmentID = YouTube::thumbnailAttachment($post->ID, true);
+          return $single ? $attachmentID : [$attachmentID];
+        }
+      }
+    }
+  }
+
 
   public static function autoload($classname)
   {

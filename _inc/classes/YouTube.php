@@ -74,7 +74,7 @@ class YouTube
      * If the post has an embedded YouTube video, but doesn't have an attachment this will
      * try and download the thumbnail and create the attachment. 
      */
-    public static function thumbnailAttachment($postID)
+    public static function thumbnailAttachment($postID, $idOnly = false)
     {
         $attachmentID = get_post_meta($postID, '_youtube_thumbnail_attachment', true);
         if (empty($attachmentID)) {
@@ -82,7 +82,9 @@ class YouTube
 
             if (!empty($json['snippet']['thumbnails'])) {
                 /* Find the largest thumbnail. That's the attachment. */
-                $firstKey = array_keys($json['snippet']['thumbnails'])[0];
+
+                $thumbs = (array) $json['snippet']['thumbnails'];
+                $firstKey = array_keys($thumbs)[0];
                 $largest = $json['snippet']['thumbnails'][$firstKey];
 
                 foreach ($json['snippet']['thumbnails'] as $key => $thumb) {
@@ -111,6 +113,11 @@ class YouTube
             /* Still no id, need to return something to catch */
             return false;
         }
+
+        if ($idOnly) {
+            return $attachmentID;
+        }
+
         return get_post($attachmentID);
     }
 }

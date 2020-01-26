@@ -10,7 +10,7 @@ module.exports = function (grunt) {
             companyName: 'Ryan Nutt',
             companySite: 'https://www.nutt.net',
             langDomain: 'aelora-youtube-embed',
-            bugsURL: 'https://www.example.com/issues-or-forum',
+            bugsURL: 'https://github.com/RyanNutt/wordpress-youtube-embed',
 
             /* Name of the plugin boot file. This is the one with the plugin header for WordPress. */
             pluginFile: 'youtube-embed.php'
